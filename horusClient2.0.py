@@ -26,17 +26,15 @@ user = auth.sign_in_with_email_and_password('tonmelodicmetal@gmail.com', "suelli
 db = firebase.database()
 storage = firebase.storage()
 
-
-
-
 def getFoto(numero,nomeExperimento):
-	print("Baixando foto")
-	time.sleep(40)
-	try:
-		print(nomeExperimento)
-		storage.child("/"+nomeExperimento+"/"+nomeExperimento+str(numero-1)+".jpg").download("down_imagem.jpg")
-	except :
-		print("Deu erro!!")
+    print("Baixando foto")
+    time.sleep(80)
+    try:
+        print(nomeExperimento)
+        print(str(numero))
+        storage.child("/"+nomeExperimento+"/"+nomeExperimento+str(numero-1)+".jpg").download("down_imagem.jpg")
+    except :
+        print("Deu erro!!")
 
 
 
@@ -70,46 +68,47 @@ for child in data.val():
 	print(data.val()[child]['count'])#pega o numero do coutn uma por uma do firebase
 """
 def getTaxa(nomeExperimento):
+    print("calculando taxa de crescimento para o experimento "+nomeExperimento +"...")
+    img = cv2.imread('down_imagem.jpg')
 
-	img = cv2.imread('down_imagem.jpg')
-	r = img[:,:,2]
-	g = img[:,:,1]
-	b = img[:,:,0]
-	imT = (g + (455-b))/2
-	#print(str(len(img)))
-	#print(str(len(img[0]))+ "-x-")
-	print("g " +str(g[20][15]))
-	print("g " +str(g[2000][1500]))
-	print(str(imT[20][15]))
-	print(str(imT[2000][1500]))
-	#hist = cv2.calcHist([r],[0],None,[256],[0,256])
-	#plt.plot(hist)
-	#hist = cv2.calcHist([g],[0],None,[256],[0,256])
-	#plt.plot(hist)
-	#hist = cv2.calcHist([b],[0],None,[256],[0,256])
-	#plt.plot(hist)
-	plt.show()
-	imsaida = np.ones((len(img),len(img[0])),dtype=np.uint8)
-	cont = 0#armazena quantidade de pixels da foto atual
-	for i in range(0,len(img)):
-		for j in range(0,len(img[0])):
-			if imT[i][j] > 255 :
-				imsaida[i][j] = 255
-				cont +=1
-			else:
-				imsaida[i][j] = 0
-	print("taxa:"+str(cont))
+    r = img[:,:,2]
+    g = img[:,:,1]
+    b = img[:,:,0]
+    imT = ((g) + (455-(b)))/4
+    blur = cv2.blur(imT,(3,3))
+    blur = cv2.blur(blur,(3,3))
+    cv2.imwrite("blur.jpg",blur)
+    blur = np.uint8(cv2.imread("blur.jpg"))
+    imsaida = np.ones((len(img),len(img[0])),dtype=np.uint8)#inicializa uma nova imagem com numeros 1
+    cont = 0#armazena quantidade de pixels da foto atual
+    for i in range(0,len(img)):
+        for j in range(0,len(img[0])):
+            if blur[i][j][1] > 255 :
+                imsaida[i][j] = 255
+                cont +=1
+            else:
+                imsaida[i][j] = 0
 
-	data = db.child(nomeExperimento).get()
-	anterior = data.val()['pixelsAnterior']
-	if anterior == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-		db.child(nomeExperimento).update({"pixelsAnterior":cont})
-	else:#calcula opercentual de crescimento em relacao a foto anterios
-		taxaPercentual =(cont * 100)/anterior
-		lista = data.val()['crescimento']['taxaCrescimento']
-		lista.append(taxaPercentual)#use rounf(numero,2) pra limitar casas
-		db.child(nomeExperimento).child("crescimento").child("taxaCrescimento").set(lista)#adiciona no firebase uma nova porcentagem
-
-		db.child(nomeExperimento).update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
+    cv2.imwrite("imsaida.jpg",imsaida)
+    print("taxa de crescimento em pixels:"+str(cont))
+    print("Calculando taxa de crescimento em percentual...")
+    print("Fazendo requisição get para experimento "+nomeExperimento+"...")
+    try:
+        data = db.child(nomeExperimento).get()
+        print("Requisição feita com sucesso!...")
+        anterior = data.val()['pixelsAnterior']
+        print("Pixels anterior "+str(anterior))
+        if anterior == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
+            db.child(nomeExperimento).update({"pixelsAnterior":cont})
+        else:#calcula opercentual de crescimento em relacao a foto anterios
+            taxaPercentual = (cont * 100)/anterior
+            print("Taxa de crescimento em percentual é "+str(taxaPercentual))
+            lista = data.val()['crescimento']['taxaCrescimento']
+            lista.append(taxaPercentual)#use rounf(numero,2) pra limitar casas
+            db.child(nomeExperimento).child("crescimento").child("taxaCrescimento").set(lista)#adiciona no firebase uma nova porcentagem
+            db.child(nomeExperimento).update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
+    except Exception as e:
+        print("Erro na requisição GET do experimento :(..")
+        raise
 
 monitorar()
