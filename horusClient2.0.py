@@ -41,9 +41,9 @@ def getFoto(numero,nomeExperimento):
 
 def monitorar():
 	print("Monitorando...")
-	data = db.child("/lisa").get()#pega referencia do firebase
-	print(str(data.val()['novaFoto'])) # printa valor da chave
-	count = data.val()['count']#pega contador atual
+	#data = db.child("/lisa").get()#pega referencia do firebase
+	#print(str(data.val()['novaFoto'])) # printa valor da chave
+	#count = data.val()['count']#pega contador atual
 	#anterior = data.val()['count']#pega contador
 	while True:
          #pega referencia do firebase
@@ -83,7 +83,7 @@ def getTaxa(nomeExperimento):
     cont = 0#armazena quantidade de pixels da foto atual
     for i in range(0,len(img)):
         for j in range(0,len(img[0])):
-            if blur[i][j][1] > 255 :
+            if blur[i][j][1] > 121 :
                 imsaida[i][j] = 255
                 cont +=1
             else:
@@ -96,17 +96,17 @@ def getTaxa(nomeExperimento):
     try:
         data = db.child(nomeExperimento).get()
         print("Requisição feita com sucesso!...")
-        anterior = data.val()['pixelsAnterior']
+        anterior = data.val()['crescimento']['pixelsAnterior']
         print("Pixels anterior "+str(anterior))
         if anterior == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-            db.child(nomeExperimento).update({"pixelsAnterior":cont})
+            db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})
         else:#calcula opercentual de crescimento em relacao a foto anterios
             taxaPercentual = (cont * 100)/anterior
             print("Taxa de crescimento em percentual é "+str(taxaPercentual))
             lista = data.val()['crescimento']['taxaCrescimento']
-            lista.append(taxaPercentual)#use rounf(numero,2) pra limitar casas
+            lista.append(round(taxaPercentual,2))#use rounf(numero,2) pra limitar casas
             db.child(nomeExperimento).child("crescimento").child("taxaCrescimento").set(lista)#adiciona no firebase uma nova porcentagem
-            db.child(nomeExperimento).update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
+            db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
     except Exception as e:
         print("Erro na requisição GET do experimento :(..")
         raise
