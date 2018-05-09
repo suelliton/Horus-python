@@ -1,0 +1,191 @@
+------comparando fotos tiradas no mesmo dia
+
+dados coletados com mau posicionamento do smarphone sem retirar o smartphone a cada foto
+
+pixels
+
+alface2404 (1) = 5492013  sem blur = 5669190
+alface2404 (2) = 5665035  sem blur = 5900885
+
+
+dif = -173022
+
+100 - 5492013
+x   -  173022
+
+5492013x =    17302200
+ x = 17302200/5492013
+
+3.150% de diferença para mais
+4.086% de diferença para mais sem blur
+
+percebe-se que o vento modifica a forma das folhas do alface fazendo com que o resultado seja diferente mesmo com fotos capturadas na mesma hora com diferença de 2 a 3 segundos de uma para a outra.neste experimento houve uma diferença de pixels verdes medidos de uma foto para a outra de 3.150% para mais, ou seja na segunda foto houve mais pixels identificados como alface.
+================================
+dados coletados colocando e tirando o smartphone a cada foto
+
+pixels
+
+alface2404 (3) = 5576790  sem blur = 5685916
+alface2404 (4) = 5138194  sem blur = 5230689
+
+dif = 438596
+
+5576790 - 100
+438596  -  x
+
+5576790x = 43859600
+x = 43859600/5576790
+
+7.864% de diferença para menos
+8.006% de diferença para menos sem blur
+
+nestas fotos percebeu-se que o ato de retirar o smartphone e recolocar a cada foto, provoca um mau posicionamento fazendo com que outras plantas que não foram capturadas na primeira foto sejam capturadas na segunda e algumas outras tendo parte de sua porção foliar não capturadas devido o mau posicionamento.
+
+=====================================
+
+dados coletados colocando e tirando todas as fotos  para manter a mesma posição porém pegando plantas indevidas e pela metade
+
+pixels
+
+alface2404 (6) = 5194405  sem blur = 5297874
+alface2404 (7) = 5191222  sem blur = 5292085
+
+dif = 3183
+
+5194405 - 100
+3183  -  x
+
+5194405x = 318300
+x = 318300/5194405
+
+0.061% de diferença para menos
+0.109% de diferença para menos sem efeito blur
+
+percebeu que a diferença entre a primeira e a segunda foto foi bastante pequena, o que explica o fato é que na hora de capturar as fotos não estava ventando no local o que garantiu imagens muito parecidas pois nem as folhas das plantas se moveram e nem o suporte de apoio do smartphone balançou.
+
+======================================
+
+
+dados coletados colocando e tirando todas as fotos  para manter a mesma posição pegando apenas plantas inteiras
+
+pixels
+
+alface2404 (8) = 5211421   sem blur = 5308646 
+alface2404 (9) = 5240286   sem blur = 5345538
+
+dif = -28865
+
+5211421 - 100
+-28865  -  x
+
+5211421x = 2886500
+x = 2886500/5211421
+
+0.553% de diferença para mais com efeito blur
+0.694% de diferenca para mais sem efeito blur
+
+nesta foto a posição saiu o ideal e a taxa de erro saiu razoavelmente dentro de padroes aceitáveis, porém o smarphone não foi retirado entre cada captura de fotos o que nos leva a pensar que a taxa de erro poderia subir consideravelmente como visto nos demais experimentos
+
+
+
+com os experimentos feitos percebeu-se que as fotos devem seguir um padrão rigoroso de captura e mesmo assim ainda sofrerão  com erros de percentual graças a senibilidade da camera e das variáveis envolvidas na captura como o vento no local a posição do smarphone, a luz entre outros fatores, percebeu-se também que o uso do efeito BLUR diminuiu o indice de erro de uma foto para a outra, graças ao seu efeito de "embaçar" a imagem fazendo com que a curva do histograma fique mais suave e o corte aconteça de melhor forma, no caso de não uso do blur a imagem fica muito detalhada e pixels visinhos podem ter valores muito distantes um dos outros fazendo com que a imagem fique mais ruidosa e esses ruidos apareçam no percentual final de crescimento. 
+
+
+
+----comparando foto de um dia para o outro----------
+
+dia 24/04:
+
+alface2404 (9) = sem blur = 5345538
+alface2404 (9) = com blur 5240286
+
+
+dia 25/04:
+
+alface2504 (1) sem blur = 6223936 
+alface2504 (1) com blur = 6114546
+
+taxa crescimento sem blur = 16.432% de crescimento com erro de +- 8% de erro ou seja o real está  entre 8.00% e 24.00%
+taxa crescimento com blur = 16.683% de crescimento com erro de += 7.8% de erro ou seja o real está entre 8.00% e 24.00%
+*valores referentes a quantidade de plantas presente na foto que é de 20 plantas
+sabendo-se disso,  16/20 = 0.8% por planta , o real pode ir de 8/20= 0.4%  a 24/20= 1.2% por planta.
+
+caracteristicas como o chão verde tendem a deixar a taxa de crescimento mentirosa, pois as ervas daninhas estão sendo captadas como folhas de alface.
+
+
+
+=============================cOM RESIZE DE IMAGEM  E BLUR DUPLO======
+----com resize  826X620
+
+alface0205 (1) 	 344130
+alface0205 (2)   340282
+
+dif = 344130 - 340282 = 3848
+
+1.118% de diferença para menos
+
+----com resize  590X442
+
+alface0205 (1) 	 175675
+alface0205 (2)   173704
+
+dif = 175675 - 173704 = 1971
+
+1.121% de diferença para menos
+
+
+----com resize  458X344
+
+alface0205 (1) 	 106425
+alface0205 (2)   105223
+
+dif = 106425 - 105223 = 1202
+
+1.129% de diferença para menos
+
+----com resize  412X310
+
+alface0205 (1)  86399
+alface0205 (2)  85453
+
+dif = 86299 - 85453 = 846
+
+1.094% de diferença para menos
+
+----com resize  376X282
+
+alface0205 (1)  71873
+alface0205 (2)  71028
+
+dif = 71873 - 71028 = 845
+
+1.175% de diferença para menos
+----com resize  274X206
+
+alface0205 (1)  38547
+alface0205 (2)  38024
+
+dif = 38547 - 38024 = 523
+
+1.356% de diferença para menos
+
+
+----com resize  206X154
+
+alface0205 (1)  21841
+alface0205 (2)  21508
+
+dif = 21841 - 21508 = 333
+
+1.524% de diferença para menos
+
+---sem resize
+
+alface0205 (1)  8560723
+alface0205 (2)  8468731
+
+dif = 8560723 - 8468731 =
+
+1.074% de diferença para menos
+
+
