@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import math
-nomeFoto = "imagens/alface0205 (1).jpg"
+nomeFoto = "imagens/alface1105 (2).jpg"
 img = cv2.imread(nomeFoto)
 
 r = img[:,:,2]
@@ -46,6 +46,7 @@ for i in range(0,len(imT)):
 		else:
 			imsaida[i][j] = 0
 print("taxa:"+str(cont))
-cv2.imwrite("saida_"+nomeFoto+".jpg",imsaida)
+print("tamanho : "+str(len(imsaida)))
+cv2.imwrite("saida.jpg",imsaida)
 plt.imshow(imsaida,'gray')
 plt.show()
