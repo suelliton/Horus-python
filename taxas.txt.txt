@@ -189,3 +189,166 @@ dif = 8560723 - 8468731 =
 1.074% de diferença para menos
 
 
+
+
+
+
+
+===================Resize sem aplicação de blur===============
+
+----com resize  826X620
+
+alface0205 (1)  351481
+alface0205 (2)  346538
+
+dif = 351481 - 346538 = 4943
+
+1.406% de diferença para menos
+
+
+
+----com resize  590X442
+
+alface0205 (1) 	 179542
+alface0205 (2)   177042
+
+dif = 179542 - 177042 = 2500
+
+1.392% de diferença para menos
+
+
+
+----com resize  458X344
+
+alface0205 (1) 	 108809
+alface0205 (2)   107272
+
+dif = 108809 - 107272 = 1537
+
+1.412% de diferença para menos
+
+
+----com resize  412X310
+
+alface0205 (1)  88396
+alface0205 (2)  87116
+
+dif = 88396 - 87116 = 1280
+
+1.448% de diferença para menos
+
+
+
+----com resize  376X282
+
+alface0205 (1)  73537
+alface0205 (2)  72465
+
+dif = 73537 - 72465 = 1072
+
+1.457% de diferença para menos
+
+
+----com resize  274X206
+
+alface0205 (1)  39458
+alface0205 (2)  38842
+
+dif = 39458 - 38842 = 616
+
+1.561% de diferença para menos
+
+
+----com resize  206X154
+
+alface0205 (1)  22424
+alface0205 (2)  22010
+
+dif = 22424 - 22010 = 333
+
+1.846% de diferença para menos
+
+
+---sem resize
+
+alface0205 (1)  8560723
+alface0205 (2)  8468731
+
+dif = 8560723 - 8468731 =
+
+1.074% de diferença para menos
+
+
+==================testes com blur================
+
+============ SEM blur SEM RESIZE ===========
+
+alface0205 (1)  8681543
+alface0205 (2)  8571908
+
+dif = 8681543 -  8571908 = 109635
+
+1,262% DE DIFERENÇA PARA MENOS
+
+
+
+
+============ com blur 3x3 simples SEM RESIZE ===========
+
+alface0205 (1)  8558947
+alface0205 (2)  8465636
+
+dif = 8558947 -  8465636 = 93311
+
+1,090% DE DIFERENÇA PARA MENOS
+
+
+
+============ com blur 5x5 simples SEM RESIZE ===========
+
+alface0205 (1)  8571054
+alface0205 (2)  8478530
+
+dif = 8571054 -  8478530 = 92524
+
+1,079% DE DIFERENÇA PARA MENOS
+
+
+============ com blur 3x3 vezes DUPLO SEM RESIZE ===========
+
+alface0205 (1)  8560723
+alface0205 (2)  8468731
+
+dif = 8560723 -  8468731 = 91992
+
+1,074% DE DIFERENÇA PARA MENOS
+
+
+============ com blur 5x5 vezes DUPLO SEM RESIZE ===========
+
+alface0205 (1)  8590988
+alface0205 (2)  8497555
+
+dif = 8590988 -  8497555 = 93433
+
+1,087% DE DIFERENÇA PARA MENOS
+
+
+============ com blur 3x3 TRIPLO SEM RESIZE ===========
+
+alface0205 (1)  8565747
+alface0205 (2)  8473654
+
+dif = 8565747 -  8473654 = 92093
+
+1,075% DE DIFERENÇA PARA MENOS
+
+
+============ com blur 5x5 vezes TRIPLO SEM RESIZE ===========
+
+alface0205 (1)  8607384
+alface0205 (2)  8512497
+
+dif = 8607384 -  8512497 = 94887
+
+1,102% DE DIFERENÇA PARA MENOS
