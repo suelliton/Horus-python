@@ -28,7 +28,7 @@ storage = firebase.storage()
 
 def getFoto(numero,nomeExperimento):
     print("Baixando foto")
-    time.sleep(80)
+    #time.sleep(80)
     try:
         print(nomeExperimento)
         print(str(numero))
@@ -96,17 +96,19 @@ def getTaxa(nomeExperimento):
     try:
         data = db.child(nomeExperimento).get()
         print("Requisição feita com sucesso!...")
-        anterior = data.val()['crescimento']['pixelsAnterior']
-        print("Pixels anterior "+str(anterior))
-        if anterior == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-            db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})
+        pixelsFotoInicial = data.val()['crescimento']['pixelsFotoInicial']
+        print("Pixels primeira foto "+str(pixelsFotoInicial))
+        if pixelsFotoInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
+            db.child(nomeExperimento).child("crescimento").update({"pixelsFotoInicial":cont})
         else:#calcula opercentual de crescimento em relacao a foto anterios
-            taxaPercentual = (cont * 100)/anterior
+            taxaPercentual = ((cont-pixelsFotoInicial) * 100)/pixelsFotoInicial
             print("Taxa de crescimento em percentual é "+str(taxaPercentual))
-            lista = data.val()['crescimento']['taxaCrescimento']
-            lista.append(round(taxaPercentual,2))#use rounf(numero,2) pra limitar casas
-            db.child(nomeExperimento).child("crescimento").child("taxaCrescimento").set(lista)#adiciona no firebase uma nova porcentagem
-            db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
+            lista = data.val()['crescimento']['capturas']#pega a lista de capturas
+            dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
+            dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
+            lista.append({"dataCaptura":dataCaptura,"taxaCrescimento":round(taxaPercentual,2)})#use rounf(numero,2) pra limitar casas
+            db.child(nomeExperimento).child("crescimento").child("capturas").set(lista)#adiciona no firebase uma nova porcentagem
+            #db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
     except Exception as e:
         print("Erro na requisição GET do experimento :(..")
         raise

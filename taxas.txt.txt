@@ -269,14 +269,7 @@ dif = 22424 - 22010 = 333
 1.846% de diferença para menos
 
 
----sem resize
 
-alface0205 (1)  8560723
-alface0205 (2)  8468731
-
-dif = 8560723 - 8468731 =
-
-1.074% de diferença para menos
 
 
 ==================testes com blur================
