@@ -31,7 +31,7 @@ def monitorar(database,storage,pdiOb):
                  #getFoto(count,experimento.val()["nome"])
                  database.child(experimento.val()["nome"]).update({"novaFoto":False})
                  pdiOb.getTaxa(experimento.val()["nome"])
-         time.sleep(5)
+         time.sleep(300)
 
 
 
