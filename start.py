@@ -28,8 +28,8 @@ def monitorar(database,storage,pdiOb):
              count = experimento.val()['count']#pega contador atual
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
-                 #getFoto(count,experimento.val()["nome"])
-                 database.child(experimento.val()["nome"]).update({"novaFoto":False})
+                 getFoto(count,experimento.val()["nome"])
+                 database.child(experimento.val()["nome"]).update({"novaFoto":False})                 
                  pdiOb.getTaxa(experimento.val()["nome"])
          time.sleep(300)
 
