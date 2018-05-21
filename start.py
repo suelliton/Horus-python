@@ -23,8 +23,8 @@ def monitorar(database,storage,pdiOb):
         # print(str(data.val()))
          for nomeExperimento in data.val():
              experimento = database.child(nomeExperimento).get()
-             print(str(experimento.val()))
-             print(str(experimento.val()['count'])) # printa valor da chave
+             #print(str(experimento.val()))
+             #print(str(experimento.val()['count'])) # printa valor da chave
              count = experimento.val()['count']#pega contador atual
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
