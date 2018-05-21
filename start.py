@@ -15,6 +15,19 @@ def main():
     pdiOb = Pdi(database,storage)
     monitorar(database,storage,pdiOb)
 
+
+
+def getFoto(numero,nomeExperimento,storage):
+    print("Baixando foto")
+    #time.sleep(80)
+    try:
+        print(nomeExperimento)
+        print(str(numero))
+        storage.child("/"+nomeExperimento+"/"+nomeExperimento+str(numero-1)+".jpg").download("down_imagem.jpg")
+    except :
+        print("Deu erro!!")
+
+
 def monitorar(database,storage,pdiOb):
 	print("Monitorando...")
 	while True:
@@ -28,8 +41,8 @@ def monitorar(database,storage,pdiOb):
              count = experimento.val()['count']#pega contador atual
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
-                 getFoto(count,experimento.val()["nome"])
-                 database.child(experimento.val()["nome"]).update({"novaFoto":False})                 
+                 getFoto(count,experimento.val()["nome"],storage)
+                 database.child(experimento.val()["nome"]).update({"novaFoto":False})
                  pdiOb.getTaxa(experimento.val()["nome"])
          time.sleep(300)
 
