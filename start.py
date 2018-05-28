@@ -29,12 +29,13 @@ def getFoto(numero,nomeExperimento,storage):
 
 
 def monitorar(database,storage,pdiOb):
-	print("Monitorando...")
-	while True:
+
+    while True:
+        print("Monitorando...")
          #pega referencia do firebase
-         data = database.child().get()
+        data = database.child().get()
         # print(str(data.val()))
-         for nomeExperimento in data.val():
+        for nomeExperimento in data.val():
              experimento = database.child(nomeExperimento).get()
              #print(str(experimento.val()))
              #print(str(experimento.val()['count'])) # printa valor da chave
@@ -44,7 +45,7 @@ def monitorar(database,storage,pdiOb):
                  getFoto(count,experimento.val()["nome"],storage)
                  database.child(experimento.val()["nome"]).update({"novaFoto":False})
                  pdiOb.getTaxa(experimento.val()["nome"])
-         time.sleep(300)
+        time.sleep(60)
 
 
 
