@@ -64,7 +64,7 @@ def calculaTaxaCrescimento(totalPixels,database,nomeExperimento):
     pixelsFotoInicial = data.val()['crescimento']['pixelsFotoInicial']
     print("Pixels primeira foto "+str(pixelsFotoInicial))
     if pixelsFotoInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-        database.child(nomeExperimento).child("crescimento").update({"pixelsFotoInicial":cont})
+        database.child(nomeExperimento).child("crescimento").update({"pixelsFotoInicial":totalPixels})
     else:#calcula opercentual de crescimento em relacao a foto anterios
         taxaPercentual = ((totalPixels-pixelsFotoInicial) * 100)/pixelsFotoInicial
         print("Taxa de crescimento em percentual é "+str(taxaPercentual))
