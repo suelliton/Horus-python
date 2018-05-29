@@ -45,7 +45,6 @@ def monitorar(database,storage,pdiOb):
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
                  rotina(experimento.val()["nome"],count,database,storage,pdiOb)
-
         time.sleep(60)
 
 def rotina(nomeExperimento,count,database,storage,pdiOb):
