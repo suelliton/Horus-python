@@ -2,6 +2,8 @@
 import time
 from autentica import Autentica
 from pdi import Pdi
+import threading
+
 
 
 
@@ -23,7 +25,7 @@ def getFoto(numero,nomeExperimento,storage):
     try:
         print(nomeExperimento)
         print(str(numero))
-        storage.child("/"+nomeExperimento+"/"+nomeExperimento+str(numero-1)+".jpg").download("down_imagem.jpg")
+        storage.child("/"+nomeExperimento+"/"+nomeExperimento+str(numero-1)+".jpg").download(nomeExperimento+str(numero-1)+".jpg")
     except :
         print("Deu erro!!")
 
@@ -42,12 +44,16 @@ def monitorar(database,storage,pdiOb):
              count = experimento.val()['count']#pega contador atual
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
-                 getFoto(count,experimento.val()["nome"],storage)
-                 database.child(experimento.val()["nome"]).update({"novaFoto":False})
-                 pdiOb.getTaxa(experimento.val()["nome"])
+                 rotina(experimento.val()["nome"],count,database,storage,pdiOb)
+
         time.sleep(60)
 
-
+def rotina(nomeExperimento,count,database,storage,pdiOb):
+    print("Thread "+ nomeExperimento+" iniciada")
+    getFoto(count,nomeExperimento,storage)
+    database.child(nomeExperimento).update({"novaFoto":False})
+    pdiOb.getTaxa(nomeExperimento,count)
+    print("Thread "+ nomeExperimento+" morreu")
 
 
 
