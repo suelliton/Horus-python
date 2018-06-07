@@ -45,7 +45,7 @@ def monitorar(database,storage,pdiOb):
              existeNova = experimento.val()['novaFoto']#boobleano de controle
              if existeNova:
                  rotina(experimento.val()["nome"],count,database,storage,pdiOb)
-        time.sleep(60)
+        time.sleep(5)
 
 def rotina(nomeExperimento,count,database,storage,pdiOb):
     print("Thread "+ nomeExperimento+" iniciada")
