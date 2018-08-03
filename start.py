@@ -33,25 +33,26 @@ def getFoto(numero,nomeExperimento,storage):
 def monitorar(database,storage,pdiOb):
 
     while True:
-        print("Monitorando...")
+        print("Monitorando...")        
          #pega referencia do firebase
         data = database.child().get()
         # print(str(data.val()))
-        for nomeExperimento in data.val():
-             experimento = database.child(nomeExperimento).get()
-             #print(str(experimento.val()))
-             #print(str(experimento.val()['count'])) # printa valor da chave
-             count = experimento.val()['count']#pega contador atual
-             existeNova = experimento.val()['novaFoto']#boobleano de controle
-             if existeNova:
-                 rotina(experimento.val()["nome"],count,database,storage,pdiOb)
+        if len(data.val()) > 0:
+            for nomeExperimento in data.val():
+                 experimento = database.child(nomeExperimento).get()
+                 #print(str(experimento.val()))
+                 #print(str(experimento.val()['count'])) # printa valor da chave
+                 count = experimento.val()['count']#pega contador atual
+                 existeNova = experimento.val()['novaFoto']#boobleano de controle
+                 if existeNova:
+                     rotina(experimento.val()["nome"],count,database,storage,pdiOb)
         time.sleep(5)
 
 def rotina(nomeExperimento,count,database,storage,pdiOb):
     print("Thread "+ nomeExperimento+" iniciada")
     getFoto(count,nomeExperimento,storage)
-    database.child(nomeExperimento).update({"novaFoto":False})
-    pdiOb.getTaxa(nomeExperimento,count)
+    #database.child(nomeExperimento).update({"novaFoto":False})
+    pdiOb.getDados(nomeExperimento,count)
     print("Thread "+ nomeExperimento+" morreu")
 
 
