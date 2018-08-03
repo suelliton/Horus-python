@@ -36,11 +36,11 @@ class Pdi(object):
             print("Erro na requisição GET do experimento :(..")
             self._database.child(nomeExperimento).update({"novaFoto":True})#se nao der certo ele deixa como esta
             raise
-        #os.remove(nomeExperimento+str(numero-1)+".jpg")
-        #os.remove("blurRed_"+nomeExperimento+str(numero-1)+"_.jpg")
-        #os.remove("blurGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
-        #os.remove("imsaidaRed_"+nomeExperimento+str(numero-1)+"_.jpg")
-        #os.remove("imsaidaGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
+        os.remove(nomeExperimento+str(numero-1)+".jpg")
+        os.remove("blurRed_"+nomeExperimento+str(numero-1)+"_.jpg")
+        os.remove("blurGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
+        os.remove("imsaidaRed_"+nomeExperimento+str(numero-1)+"_.jpg")
+        os.remove("imsaidaGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
 
 
 def calculaPixels(blurRed, blurGreen, nomeExperimento, numero):
