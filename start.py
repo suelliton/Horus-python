@@ -33,11 +33,11 @@ def getFoto(numero,nomeExperimento,storage):
 def monitorar(database,storage,pdiOb):
 
     while True:
-        print("Monitorando...")        
+        print("Monitorando...")
          #pega referencia do firebase
         data = database.child().get()
         # print(str(data.val()))
-        if len(data.val()) > 0:
+        if data.val() != None :
             for nomeExperimento in data.val():
                  experimento = database.child(nomeExperimento).get()
                  #print(str(experimento.val()))

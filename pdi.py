@@ -103,15 +103,15 @@ def preProcessamento(img,nomeExperimento,numero):
 def calculaTaxaCrescimento(redPixels, greenPixels, database, nomeExperimento):
     data = database.child(nomeExperimento).get()
     print("Requisição feita com sucesso!...")
-    pixelsFotoInicial = data.val()['crescimento']['pixelsFotoInicial']
+    areaInicial = data.val()['crescimento']['areaInicial']
     #print("Pixels primeira foto "+str(pixelsFotoInicial))
     if redPixels == 0 :
         redPixels = greenPixels * 4;
 
-    if pixelsFotoInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-        database.child(nomeExperimento).child("crescimento").update({"pixelsFotoInicial":greenPixels})
+    if areaInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
         lista = []#pega a lista de capturas
         areaGreen = (4 * greenPixels) / redPixels#calculo area verde
+        database.child(nomeExperimento).child("crescimento").update({"areaInicial":round(areaGreen,2)})
         print("Area verde total	"+ str(areaGreen))
         dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
         dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
@@ -119,11 +119,11 @@ def calculaTaxaCrescimento(redPixels, greenPixels, database, nomeExperimento):
         database.child(nomeExperimento).child("crescimento").child("capturas").set(lista)#adiciona no firebase uma nova porcentagem
 
     else:#calcula opercentual de crescimento em relacao a foto anterios
-        percentualCrescimento = ((greenPixels-pixelsFotoInicial) * 100)/pixelsFotoInicial
-        print("Taxa de crescimento em percentual é "+str(percentualCrescimento))
         lista = data.val()['crescimento']['capturas']#pega a lista de capturas
         areaGreen = (4 * greenPixels) / redPixels#calcula area verde
         print("Area verde total	"+ str(areaGreen))
+        percentualCrescimento = ((areaGreen-areaInicial) * 100)/areaInicial
+        print("Taxa de crescimento em percentual é "+str(percentualCrescimento))
 
         dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
         dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
