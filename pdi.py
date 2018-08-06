@@ -106,7 +106,7 @@ def calculaTaxaCrescimento(redPixels, greenPixels, database, nomeExperimento):
     areaInicial = data.val()['crescimento']['areaInicial']
     #print("Pixels primeira foto "+str(pixelsFotoInicial))
     if redPixels == 0 :
-        redPixels = greenPixels * 4;
+        redPixels = (greenPixels * 4)+1;
 
     if areaInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
         lista = []#pega a lista de capturas
