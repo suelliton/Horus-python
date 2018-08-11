@@ -3,6 +3,7 @@
 import cv2
 import numpy as np
 import os
+import random
 #from matplotlib import pyplot as plt
 
 
@@ -15,38 +16,44 @@ class Pdi(object):
         self._storage = storage
 
 
+    def getDados(self,experimento):
+        print("calculando taxa de crescimento para o experimento "+experimento['nome'] +"...")
+        path = experimento['nome']+str(experimento['count']-1)+".jpg"
+        img = cv2.imread(path)#leitura de foto que foi baixada
+        img = cv2.resize(img,(874,1032))#resize
 
-
-
-    def getDados(self,nomeExperimento,numero):
-        print("calculando taxa de crescimento para o experimento "+nomeExperimento +"...")
-
-        img = cv2.imread(nomeExperimento+str(numero-1)+".jpg")
-
-        blurRed, blurGreen = preProcessamento(img,nomeExperimento,numero)
-
-        redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,nomeExperimento,numero)
-
-        print("Fazendo requisição get para experimento "+nomeExperimento+"...")
-        try:
-            calculaTaxaCrescimento(redPixels, greenPixels,self._database,nomeExperimento)
-            self._database.child(nomeExperimento).update({"novaFoto":False})
+        #inclui blur nas imagens
+        blurRed, blurGreen = preProcessamento(img,experimento['nome'],experimento['count'])
+        #faz a contagem de pixels das areas de interesse
+        redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,experimento['nome'],experimento['count'])
+        #redPixels = random.randint(0,100);
+        #greenPixels=random.randint(0,1000);
+        print("Fazendo requisição get para experimento "+experimento['nome']+"...")
+        try:#calcula taxa de crescimento e area
+            experimento = calculaTaxaCrescimento(redPixels, greenPixels,experimento)
+            experimento['novaFoto'] = False#avisa que deu certo dizendo ue nao a foto nova
+            #faz a remocao de todas as fotos geradas durante o processo para evitar desperdicio de disco
+            os.remove(experimento['nome']+str(experimento['count']-1)+".jpg")
+            os.remove("blurRed_"+experimento['nome']+str(experimento['count']-1)+"_.jpg")
+            os.remove("blurGreen_"+experimento['nome']+str(experimento['count']-1)+"_.jpg")
+            os.remove("imsaidaRed_"+experimento['nome']+str(experimento['count']-1)+"_.jpg")
+            os.remove("imsaidaGreen_"+experimento['nome']+str(experimento['count']-1)+"_.jpg")
+            return experimento#retorna o experimento j´´aatualizado para a classe start
 
         except Exception as e:
             print("Erro na requisição GET do experimento :(..")
-            self._database.child(nomeExperimento).update({"novaFoto":True})#se nao der certo ele deixa como esta
+            experimento['novaFoto'] = False
+            return experimento
+
+
             raise
-        os.remove(nomeExperimento+str(numero-1)+".jpg")
-        os.remove("blurRed_"+nomeExperimento+str(numero-1)+"_.jpg")
-        os.remove("blurGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
-        os.remove("imsaidaRed_"+nomeExperimento+str(numero-1)+"_.jpg")
-        os.remove("imsaidaGreen_"+nomeExperimento+str(numero-1)+"_.jpg")
+
 
 
 def calculaPixels(blurRed, blurGreen, nomeExperimento, numero):
 
-    imsaidaRed = np.ones((len(blurRed),len(blurRed[0])),dtype=np.uint8)
-    redPixels = 0
+    imsaidaRed = np.ones((len(blurRed),len(blurRed[0])),dtype=np.uint8)#instancia uma matriz numpy
+    redPixels = 0#contador
     for i in range(0,len(blurRed)):
     	for j in range(0,len(blurRed[0])):
     		if blurRed[i][j] > 130 :
@@ -100,36 +107,33 @@ def preProcessamento(img,nomeExperimento,numero):
     #blur = np.uint8(cv2.imread("blur_"+nomeExperimento+str(numero-1)+"_.jpg"))
     return blurRed, blurGreen
 
-def calculaTaxaCrescimento(redPixels, greenPixels, database, nomeExperimento):
-    data = database.child(nomeExperimento).get()
-    print("Requisição feita com sucesso!...")
-    areaInicial = data.val()['crescimento']['areaInicial']
-    #print("Pixels primeira foto "+str(pixelsFotoInicial))
+def calculaTaxaCrescimento(redPixels, greenPixels,experimento):
+
+    areaInicial = experimento['crescimento']['areaInicial']
+
     if redPixels == 0 :
         redPixels = (greenPixels * 4)+1;
 
     if areaInicial == 0:#for a primeira foto, nao tem com que comparar entao soarmazena a qtd pixels
-        lista = []#pega a lista de capturas
         areaGreen = (4 * greenPixels) / redPixels#calculo area verde
-        database.child(nomeExperimento).child("crescimento").update({"areaInicial":round(areaGreen,2)})
         print("Area verde total	"+ str(areaGreen))
-        dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
-        dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
-        lista.append({"dataCaptura":dataCaptura,"percentualCrescimento":round(0,2),"areaVerde":round(areaGreen,2)})#use rounf(numero,2) pra limitar casas
-        database.child(nomeExperimento).child("crescimento").child("capturas").set(lista)#adiciona no firebase uma nova porcentagem
+        experimento['crescimento']['areaInicial'] = round(areaGreen,2)
+
+        lista = []
+        lista.append({"dataCaptura":experimento['ultimaCaptura'],"percentualCrescimento":round(0,2),"areaVerde":round(areaGreen,2)})#use rounf(numero,2) pra limitar casas
+        experimento['crescimento']['capturas'] = lista
 
     else:#calcula opercentual de crescimento em relacao a foto anterios
-        lista = data.val()['crescimento']['capturas']#pega a lista de capturas
+        lista = experimento['crescimento']['capturas']#pega a lista de capturas
         areaGreen = (4 * greenPixels) / redPixels#calcula area verde
         print("Area verde total	"+ str(areaGreen))
         percentualCrescimento = ((areaGreen-areaInicial) * 100)/areaInicial
         print("Taxa de crescimento em percentual é "+str(percentualCrescimento))
 
-        dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
-        dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
-        lista.append({"dataCaptura":dataCaptura,"percentualCrescimento":round(percentualCrescimento,2),"areaVerde":round(areaGreen,2)})#use rounf(numero,2) pra limitar casas
-        database.child(nomeExperimento).child("crescimento").child("capturas").set(lista)#adiciona no firebase uma nova porcentagem
+        #dataCaptura = data.val()["ultimaCaptura"]#recebe ultima data de captura
+        #dataCaptura,horaCaptura = dataCaptura.split("\n")#separa a data da hora
+        lista.append({"dataCaptura":experimento['ultimaCaptura'],"percentualCrescimento":round(percentualCrescimento,2),"areaVerde":round(areaGreen,2)})#use rounf(numero,2) pra limitar casas
+        experimento['crescimento']['capturas'] = lista
+                #database.child(nomeExperimento).child("crescimento").child("capturas").set(lista)#adiciona no firebase uma nova porcentagem
 
-        #db.child(nomeExperimento).child("crescimento").update({"pixelsAnterior":cont})#o valor anterior passa a ser o atual
-
-    #calculo e envio de areaVerde
+    return experimento
