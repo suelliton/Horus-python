@@ -34,7 +34,11 @@ def monitorar(database,storage,pdiOb):#ouve o banco
     while True:
         print("Listening database...")
          #pega referencia do firebase
-        data = database.child().get()
+        try:
+            data = database.child().get()
+        except Exception as e:
+            main()
+            raise
         # print(str(data.val()))
         if data.val() != None :#verifica se tem algo no banco
             for usuario in data.val():#itera sobre os usuarios
