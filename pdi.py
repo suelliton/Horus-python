@@ -20,7 +20,7 @@ class Pdi(object):
         print("calculando taxa de crescimento para o experimento "+experimento['nome'] +"...")
         path = experimento['nome']+str(experimento['count']-1)+".jpg"
         img = cv2.imread(path)#leitura de foto que foi baixada
-        img = cv2.resize(img,(874,1032))#resize
+        img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
 
         #inclui blur nas imagens
         blurRed, blurGreen = preProcessamento(img,experimento['nome'],experimento['count'])
