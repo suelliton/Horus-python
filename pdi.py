@@ -24,8 +24,10 @@ class Pdi(object):
 
         #inclui blur nas imagens
         blurRed, blurGreen = preProcessamento(img,experimento['nome'],experimento['count'])
+        limiarRed = calculaLimiar(blurRed,150,"red")
+        limiarGreen = calculaLimiar(blurGreen,1000,"green")
         #faz a contagem de pixels das areas de interesse
-        redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,experimento['nome'],experimento['count'])
+        redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,limiarRed,limiarGreen,experimento['nome'],experimento['count'])
         #redPixels = random.randint(0,100);
         #greenPixels=random.randint(0,1000);
         print("Fazendo requisição get para experimento "+experimento['nome']+"...")
@@ -49,14 +51,32 @@ class Pdi(object):
             raise
 
 
+def calculaLimiar(img,pixelsVale,cor):
+    hist = cv2.calcHist([np.uint8(img)],[0],None,[256],[0,256])
+    maximo = max(hist)
+    indice = 0
+    for i in range(len(hist)):
+    	if hist[i] == maximo:
+            indice = i
+            break
+    corte = 0
+    for i in range(indice,len(hist)):
+    	if hist[i] < pixelsVale:
+    		corte = i
+    		break
+    if cor == "red":
+        print("corte red "+str(corte))
+    elif cor =="green":
+        print("corte green "+str(corte))
+    return corte
 
-def calculaPixels(blurRed, blurGreen, nomeExperimento, numero):
+def calculaPixels(blurRed, blurGreen,limiarRed,limiarGreen,nomeExperimento, numero):
 
     imsaidaRed = np.ones((len(blurRed),len(blurRed[0])),dtype=np.uint8)#instancia uma matriz numpy
     redPixels = 0#contador
     for i in range(0,len(blurRed)):
     	for j in range(0,len(blurRed[0])):
-    		if blurRed[i][j] > 130 :
+    		if blurRed[i][j] > limiarRed :
     			imsaidaRed[i][j] = 255
     			redPixels +=1
     		else:
@@ -69,7 +89,7 @@ def calculaPixels(blurRed, blurGreen, nomeExperimento, numero):
     greenPixels = 0
     for i in range(0,len(blurGreen)):
     	for j in range(0,len(blurGreen[0])):
-    		if blurGreen[i][j] > 120 :
+    		if blurGreen[i][j] > limiarGreen :
     			imsaidaGreen[i][j] = 255
     			greenPixels +=1
     		else:

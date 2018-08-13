@@ -51,16 +51,15 @@ def monitorar(database,storage,pdiOb):#ouve o banco
                              nomeExperimento = experimento['nome']
                              nomeUsuario = usuario
                              status = experimento['status']
-                             print("count :"+str(count))
-                             print("tem nova? :"+str(existeNova))
-                             print("Usuario :"+ nomeUsuario)
-                             print("Experimento: "+str(experimento['nome']))
                              if existeNova and status == "ativo":# se tiver foto nova e se o status for ativo
-                                 print("tem nova")
+                                 print("nova foto")
+                                 print("Usuario :"+ nomeUsuario)
+                                 print("Experimento: "+str(experimento['nome']))
+                                 print("count :"+str(count))
                                  exp = rotina(experimento,database,storage,pdiOb)#rotina de processamento
                                  atualizaExperimento(database,usuario,exp)# funcao pega os dados mais atuais para evitar perda de fotos
 
-                             print("------\n\n")
+                             #print("------\n\n")
         time.sleep(5)#intervalo de reuisicoes
 
 def atualizaExperimento(database,usuario,experimento):
