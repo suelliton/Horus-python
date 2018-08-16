@@ -3,6 +3,7 @@ import time
 from autentica import Autentica
 from pdi import Pdi
 import threading
+import os
 
 
 
@@ -20,14 +21,26 @@ def main():
 
 
 
-def getFoto(experimento,storage):
+def getFoto(usuario,experimento,storage):
     print("Download image...")
     #time.sleep(80)
     try:
-        print(experimento['nome']+str(experimento['count']-1))
-        storage.child("/"+experimento['nome']+"/"+experimento['nome']+str(experimento['count']-1)+".jpg").download(experimento['nome']+str(experimento['count']-1)+".jpg")
+        print(usuario +"/"+experimento['nome']+str(experimento['count']-1))
+        storage.child("/"+usuario+"/"+experimento['nome']+"/"+experimento['nome']+str(experimento['count']-1)+".jpg").download(experimento['nome']+str(experimento['count']-1)+".jpg")
     except :
         print("Error in download !!")
+
+def putFoto(usuario,experimento,storage):
+    print("Uploading image...")
+    #time.sleep(80)
+    try:
+        print(usuario +"/"+experimento['nome']+str(experimento['count']))
+        storage.child("/"+usuario+"/"+experimento['nome']+"/result/"+experimento['nome']+str(experimento['count'])+".jpg").put("imsaidaColorida.jpg")
+    except :
+        print("Error in uploading !!")
+
+    #os.remove("imsaidaColorida.jpg")
+
 
 
 def monitorar(database,storage,pdiOb):#ouve o banco
@@ -56,7 +69,7 @@ def monitorar(database,storage,pdiOb):#ouve o banco
                                  print("Usuario :"+ nomeUsuario)
                                  print("Experimento: "+str(experimento['nome']))
                                  print("count :"+str(count))
-                                 exp = rotina(experimento,database,storage,pdiOb)#rotina de processamento
+                                 exp = rotina(usuario,experimento,database,storage,pdiOb)#rotina de processamento
                                  atualizaExperimento(database,usuario,exp)# funcao pega os dados mais atuais para evitar perda de fotos
 
                              #print("------\n\n")
@@ -72,10 +85,11 @@ def atualizaExperimento(database,usuario,experimento):
     database.update({usuario+"/experimentos":lista})#atualiza a lista do banco com a lista nova
 
 
-def rotina(experimento,database,storage,pdiOb):
+def rotina(usuario,experimento,database,storage,pdiOb):
     print("Task running for " + experimento['nome']+" ..." )
-    getFoto(experimento,storage)
+    getFoto(usuario,experimento,storage)
     exp = pdiOb.getDados(experimento)#chama objeto da classe pdi
+    putFoto(usuario,experimento,storage)
     return exp
 
 

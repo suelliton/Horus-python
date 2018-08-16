@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import os
 import random
+import time
 #from matplotlib import pyplot as plt
 
 
@@ -28,6 +29,7 @@ class Pdi(object):
         limiarGreen = calculaLimiar(blurGreen,1000,"green")
         #faz a contagem de pixels das areas de interesse
         redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,limiarRed,limiarGreen,experimento['nome'],experimento['count'])
+        geraImagemSaida(experimento)
         #redPixels = random.randint(0,100);
         #greenPixels=random.randint(0,1000);
         print("Fazendo requisição get para experimento "+experimento['nome']+"...")
@@ -49,6 +51,25 @@ class Pdi(object):
 
 
             raise
+
+
+
+def geraImagemSaida(experimento):
+    time.sleep(2)
+    red = cv2.cvtColor(cv2.imread("imsaidaRed_"+experimento['nome']+str(experimento['count']-1)+"_.jpg"), cv2.COLOR_BGR2GRAY)
+    green = cv2.cvtColor(cv2.imread("imsaidaGreen_"+experimento['nome']+str(experimento['count']-1)+"_.jpg"), cv2.COLOR_BGR2GRAY)
+    imsaidaColorida = np.ones((len(red),len(red[0]),3),dtype=np.uint8)
+    for i in range(0,len(red)):
+        for j in range(0,len(red[0])):
+            if red[i][j] == 255:
+                imsaidaColorida[i][j][0] = 0
+                imsaidaColorida[i][j][1] = 0
+                imsaidaColorida[i][j][2] = 255
+            if green[i][j] == 255:
+                imsaidaColorida[i][j][0] = 0
+                imsaidaColorida[i][j][1] = 255
+                imsaidaColorida[i][j][2] = 0
+    cv2.imwrite("imsaidaColorida.jpg",imsaidaColorida)
 
 
 def calculaLimiar(img,pixelsVale,cor):
