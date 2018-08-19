@@ -21,12 +21,19 @@ class Pdi(object):
         print("calculando taxa de crescimento para o experimento "+experimento['nome'] +"...")
         path = experimento['nome']+str(experimento['count']-1)+".jpg"
         img = cv2.imread(path)#leitura de foto que foi baixada
-        img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
+        if len(img) > len(img[0]):
+            img = cv2.resize(img,(874,1032))
+        elif len(img) < len(img[0]):
+            img = cv2.resize(img,(1032,874))
+        else:
+            img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
+
+        #img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
 
         #inclui blur nas imagens
         blurRed, blurGreen = preProcessamento(img,experimento['nome'],experimento['count'])
-        limiarRed = calculaLimiar(blurRed,150,"red")
-        limiarGreen = calculaLimiar(blurGreen,1000,"green")
+        limiarRed = calculaLimiar(blurRed)
+        limiarGreen = calculaLimiar(blurGreen)
         #faz a contagem de pixels das areas de interesse
         redPixels, greenPixels  = calculaPixels(blurRed,blurGreen,limiarRed,limiarGreen,experimento['nome'],experimento['count'])
         geraImagemSaida(experimento)
@@ -48,7 +55,6 @@ class Pdi(object):
             print("Erro na requisição GET do experimento :(..")
             experimento['novaFoto'] = False
             return experimento
-
 
             raise
 
@@ -72,24 +78,32 @@ def geraImagemSaida(experimento):
     cv2.imwrite("imsaidaColorida.jpg",imsaidaColorida)
 
 
-def calculaLimiar(img,pixelsVale,cor):
+def calculaLimiar(img):
     hist = cv2.calcHist([np.uint8(img)],[0],None,[256],[0,256])
-    maximo = max(hist)
-    indice = 0
-    for i in range(len(hist)):
-    	if hist[i] == maximo:
-            indice = i
-            break
-    corte = 0
-    for i in range(indice,len(hist)):
-    	if hist[i] < pixelsVale:
-    		corte = i
-    		break
-    if cor == "red":
-        print("corte red "+str(corte))
-    elif cor =="green":
-        print("corte green "+str(corte))
-    return corte
+    anterior = 0
+    pico1 = 0
+    for i in range(255,100,-1):
+        #print(str(i))
+        anterior = pico1
+        if hist[i] > hist[pico1]:
+            pico1 = i
+        if hist[i] < hist[anterior]:
+            break;
+    print("pico1 "+ str(pico1))
+    pico2 = 0
+    for i in range(pico1-1,0,-1):
+        if hist[i] >= hist[pico1]:
+            pico2 = i
+            break;
+    print("pico2 "+ str(pico2))
+    v = int( ((pico1-pico2)/2)+pico2)
+    vale = hist[v]
+    print("valor do corte  "+ str(v))
+    print("valor do pixel  "+ str(vale))
+    print("------------------\n")
+    if pico1-pico1 < 5:# se nao existir o pico um ou seja se ja for direto pro pico grande
+        return 120
+    return v
 
 def calculaPixels(blurRed, blurGreen,limiarRed,limiarGreen,nomeExperimento, numero):
 
