@@ -31,14 +31,20 @@ def getFoto(usuario,experimento,storage):
         print("Error in download !!")
 
 def putFoto(usuario,experimento,storage):
-    print("Uploading image...")
+    print("Uploading image result...")
     #time.sleep(80)
     try:
         print(usuario +"/"+experimento['nome']+str(experimento['count']))
         storage.child("/"+usuario+"/"+experimento['nome']+"/result/"+experimento['nome']+str(experimento['count'])+".jpg").put("imsaidaColorida.jpg")
     except :
         print("Error in uploading !!")
-
+    print("Uploading image resize...")
+    #time.sleep(80)
+    try:
+        print(usuario +"/"+experimento['nome']+str(experimento['count']))
+        storage.child("/"+usuario+"/"+experimento['nome']+"/result/resize/"+experimento['nome']+str(experimento['count'])+".jpg").put("imsaidaResize.jpg")
+    except :
+        print("Error in uploading !!")
     #os.remove("imsaidaColorida.jpg")
 
 

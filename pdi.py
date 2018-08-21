@@ -29,6 +29,7 @@ class Pdi(object):
             img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
 
         #img = cv2.resize(img,(int(len(img[0])/4),int(len(img)/4)))
+        cv2.imwrite("imsaidaResize.jpg",img)
 
         #inclui blur nas imagens
         blurRed, blurGreen = preProcessamento(img,experimento['nome'],experimento['count'])
