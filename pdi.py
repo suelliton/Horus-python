@@ -102,7 +102,7 @@ def calculaLimiar(img):
     print("valor do corte  "+ str(v))
     print("valor do pixel  "+ str(vale))
     print("------------------\n")
-    if pico1-pico1 < 5:# se nao existir o pico um ou seja se ja for direto pro pico grande
+    if pico1-pico2 < 5:# se nao existir o pico um ou seja se ja for direto pro pico grande
         return 120
     return v
 
