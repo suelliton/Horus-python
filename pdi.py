@@ -143,8 +143,7 @@ def preProcessamento(img,nomeExperimento,numero):
     b = img[:,:,0]
 
 #####
-    imCinzaRed =  ((r) + (455-(g)))/4
-    #imCinzaRed =  ((2*r) - (b) - (g))/2
+    imCinzaRed =  ((r) + (455-(g)))/4    
     blurRed = cv2.blur(imCinzaRed,(3,3))
     blurRed = cv2.blur(blurRed,(3,3))
     cv2.imwrite("blurRed.jpg",blurRed)
