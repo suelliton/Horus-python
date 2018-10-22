@@ -11,10 +11,9 @@ import time
 
 
 class Pdi(object):
-    def __init__(self,database,storage):
+    def __init__(self):
         super(Pdi, self).__init__()
-        self._database = database
-        self._storage = storage
+
 
 
     def getDados(self,experimento):
@@ -143,7 +142,7 @@ def preProcessamento(img,nomeExperimento,numero):
     b = img[:,:,0]
 
 #####
-    imCinzaRed =  ((r) + (455-(g)))/4    
+    imCinzaRed =  ((r) + (455-(g)))/4
     blurRed = cv2.blur(imCinzaRed,(3,3))
     blurRed = cv2.blur(blurRed,(3,3))
     cv2.imwrite("blurRed.jpg",blurRed)

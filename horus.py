@@ -16,7 +16,7 @@ def main():
         print("Usuario logado, banco e storage disponiveis")
     else:
         print("Erro no login")
-    pdiOb = Pdi(database,storage)#cria um objeto da classe pdi
+    pdiOb = Pdi()#cria um objeto da classe pdi
     monitorar(database,storage,pdiOb)#inicia o monitoramento do banco
 
 
